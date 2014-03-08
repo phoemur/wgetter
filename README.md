@@ -1,7 +1,7 @@
 About
 ======
 
-Pyget is another command line download utility written completely in python.
+Wgetter is another command line download utility written completely in python.
 It is based on python-wget (https://bitbucket.org/techtonik/python-wget/src)
 with some improvements.
 
@@ -12,14 +12,14 @@ Runs on Windows or Linux
 Usage
 ======
 
-    python -m pyget <URL>
+    python -m wgetter <URL>
 
 
 API Usage
 ======
 
-    >>> import pyget
-    >>> filename = pyget.download('https://sites.google.com/site/doctormike/pacman-1.2.tar.gz')
+    >>> import wgetter
+    >>> filename = wgetter.download('https://sites.google.com/site/doctormike/pacman-1.2.tar.gz')
     100 % [====================================================>] 19.9KiB / 19.9KiB  100.0KiB/s  
     >>> filename
     'pacman-1.2.tar.gz'
@@ -27,7 +27,7 @@ API Usage
 Changelog
 ========
 
-0.1 (2014-03-06)
+0.2 (2014-03-06)
  * Init version, uses urllib2 instead of urlretrieve (deprecated), reads in chunks with network transfer rate calculation.
    Fancy bar. Human readable file-sizes. Checks Md5 if available and download final size.
    It's a heavy modification of python-wget made for my needs that i decided to share.

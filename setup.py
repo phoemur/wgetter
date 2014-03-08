@@ -1,11 +1,11 @@
 from distutils.core import setup
             
 setup(
-    name='pyget',
-    version='0.1',
+    name='wgetter',
+    version='0.2',
     author='Fernando Giannasi <phoemur@gmail.com>',
-    url='https://github.com/phoemur/pyget',
-    download_url = 'https://github.com/phoemur/pyget/tarball/0.1',
+    url='https://github.com/phoemur/wgetter',
+    download_url = 'https://github.com/phoemur/wgetter/tarball/0.2',
 
     description="Another command line download utility written in python",
     license="Public Domain",
@@ -20,9 +20,9 @@ setup(
         'Topic :: Utilities',
     ],
 
-    py_modules=['pyget'],
+    py_modules=['wgetter'],
 
-    long_description='''Pyget is another command line download utility written completely in python.
+    long_description='''Wgetter is another command line download utility written completely in python.
 It is based on python-wget (https://bitbucket.org/techtonik/python-wget/src)
 with some improvements.
 

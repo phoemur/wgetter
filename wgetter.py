@@ -288,7 +288,7 @@ def download(link, chunk_size=4096):
     if total_size != 'unknown' and total_size != bytes_so_far:
         print('\n\nWARNING!! Downloaded file size mismatches... Probably corrupted...')
     
-    # Check md5 if it was in html headers
+    # Check md5 if it was in html header
     if md5_header:
         print('\nValidating MD5 checksum...')
         if md5_header == md5sum(filename):

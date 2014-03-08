@@ -20,7 +20,7 @@ API Usage
 
     >>> import pyget
     >>> filename = pyget.download('https://sites.google.com/site/doctormike/pacman-1.2.tar.gz')
-    100 % [=======================================================================>] 19.9KiB / 19.9KiB  100.0KiB/s  
+    100 % [====================================================>] 19.9KiB / 19.9KiB  100.0KiB/s  
     >>> filename
     'pacman-1.2.tar.gz'
 

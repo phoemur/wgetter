@@ -19,10 +19,12 @@ API Usage
 ========
 
     >>> import wgetter
-    >>> filename = wgetter.download('https://sites.google.com/site/doctormike/pacman-1.2.tar.gz')
+    >>> filename = wgetter.download('https://sites.google.com/site/doctormike/pacman-1.2.tar.gz', outdir='/home/user')
     100 % [====================================================>] 19.9KiB / 19.9KiB  100.0KiB/s  
     >>> filename
-    'pacman-1.2.tar.gz'
+    '/home/user/pacman-1.2.tar.gz'
+    
+Obs.: If not set, output directory (outdir) defaults to current directory
 
 Installation
 ========
@@ -47,6 +49,9 @@ Then
     
 Changelog
 ========
+
+0.3 (2014-03-08)
+ * Added the option to set download's output directory
 
 0.2 (2014-03-06)
  * Init version, uses urllib2 instead of urlretrieve (deprecated), reads in chunks with network transfer rate calculation.

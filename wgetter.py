@@ -1,5 +1,19 @@
 #!/usr/bin/env python
 
+"""
+Wgetter is another command line download utility written completely in python. 
+It is based on python-wget (https://bitbucket.org/techtonik/python-wget/src) with some improvements.
+It works on python >= 2.6 or python >=3.0 Runs on Windows or Linux or Mac
+
+API Usage:
+
+>>> import wgetter
+>>> filename = wgetter.download('https://sites.google.com/site/doctormike/pacman-1.2.tar.gz', outdir='/home/user')
+100 % [====================================================>] 19.9KiB / 19.9KiB  100.0KiB/s  
+>>> filename
+'/home/user/pacman-1.2.tar.gz'
+"""
+
 import sys
 import os
 import shutil
@@ -141,11 +155,10 @@ def filename_from_headers(headers):
         return None
     return name
 
-def filename_fix_existing(filename):
+def filename_fix_existing(filename, dirname):
     """Expands name portion of filename with numeric ' (x)' suffix to
     return filename that doesn't exist already.
     """
-    dirname = '.' 
     name, ext = filename.rsplit('.', 1)
     names = [x for x in os.listdir(dirname) if x.startswith(name)]
     names = [x.rsplit('.', 1)[0] for x in names]
@@ -206,9 +219,9 @@ def md5sum(filename, blocksize=8192):
             m.update(data)
         return m.hexdigest()
     
-def download(link, chunk_size=4096):
+def download(link, outdir='.', chunk_size=4096):
     '''
-    This is the Main function, which downloads a given link and saves on current directory 
+    This is the Main function, which downloads a given link and saves on outdir (default = current directory)
     '''
     url = None
     fh = None
@@ -216,7 +229,7 @@ def download(link, chunk_size=4096):
     filename = filename_from_url(link) or "."
     
     # get filename for temp file in current directory
-    (fd_tmp, tmpfile) = tempfile.mkstemp(".tmp", prefix=filename+".", dir=".")
+    (fd_tmp, tmpfile) = tempfile.mkstemp(".tmp", prefix=filename+".", dir=outdir)
     os.close(fd_tmp)
     os.unlink(tmpfile)
     
@@ -277,10 +290,12 @@ def download(link, chunk_size=4096):
     filenamealt = filename_from_headers(headers)
     if filenamealt:
         filename = filenamealt
-        
+    
     # add numeric '(x)' suffix if filename already exists
-    if os.path.exists(filename):
-        filename = filename_fix_existing(filename)
+    if os.path.exists(os.path.join(outdir, filename)):
+        filename = filename_fix_existing(filename, outdir)
+    filename = os.path.join(outdir, filename)
+    
     shutil.move(tmpfile, filename)
     
     # Check if sizes matches
@@ -306,4 +321,4 @@ if __name__ == '__main__':
     for link in args:
         print('Downloading ' + link)
         filename = download(link)
-        print('\nSaved under {0}'.format(os.path.abspath(filename)))
+        print('\nSaved under {0}'.format(filename))

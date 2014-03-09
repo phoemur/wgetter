@@ -4,7 +4,6 @@ import sys
 import os
 import shutil
 import tempfile
-import math
 import hashlib
 
 from time import time
@@ -165,10 +164,10 @@ def report_bar(bytes_so_far, chunk_size, total_size, speed):
     '''
     This callback for the download function is used to print the download bar
     '''
-    percent = int(bytes_so_far * 100/ total_size)
+    percent = int(bytes_so_far * 100 / total_size)
     current = approximate_size(bytes_so_far).center(9)
     total = approximate_size(total_size).center(9)
-    shaded = int(math.floor(float(bytes_so_far) / total_size * AVAIL_WIDTH))
+    shaded = int(float(bytes_so_far) / total_size * AVAIL_WIDTH)
     sys.stdout.write(" {0}% [{1}{2}{3}]".format(str(percent).center(4), '='*(shaded -1), '>', 
                                      ' '*(AVAIL_WIDTH - shaded)) + "{0}/{1} {2}".format(current, total, 
                                                                   (approximate_size(speed)+'/s').center(12)))

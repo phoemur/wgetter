@@ -240,12 +240,12 @@ def download(link, outdir='.', chunk_size=4096):
         headers = url.info()
         try:
             total_size = int(headers['Content-Length'])
-        except KeyError:
+        except (ValueError, KeyError, TypeError):
             total_size = 'unknown'
             
         try:    
             md5_header = headers['Content-MD5']
-        except KeyError:
+        except (ValueError, KeyError, TypeError):
             md5_header = None
         
         # Define which callback we're gonna use

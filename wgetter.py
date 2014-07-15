@@ -125,7 +125,7 @@ def get_console_width():
 CONSOLE_WIDTH = get_console_width()
 
 # Need 2 spaces more to avoid linefeed on Windows
-AVAIL_WIDTH = CONSOLE_WIDTH - 57 if os.name == 'nt' else CONSOLE_WIDTH - 55
+AVAIL_WIDTH = CONSOLE_WIDTH - 59 if os.name == 'nt' else CONSOLE_WIDTH - 57
 
 
 def filename_from_url(url):
@@ -185,7 +185,7 @@ def filename_fix_existing(filename, dirname):
     return '{0}({1}).{2}'.format(name, idx, ext)
 
 
-def report_bar(bytes_so_far, chunk_size, total_size, speed, eta):
+def report_bar(bytes_so_far, total_size, speed, eta):
     '''
     This callback for the download function is used to print the download bar
     '''
@@ -194,21 +194,21 @@ def report_bar(bytes_so_far, chunk_size, total_size, speed, eta):
     total = approximate_size(total_size).center(9)
     shaded = int(float(bytes_so_far) / total_size * AVAIL_WIDTH)
     sys.stdout.write(
-        " {0}% [{1}{2}{3}] {4}/{5} {6} eta {7}".format(str(percent).center(4),
+        " {0}% [{1}{2}{3}] {4}/{5} {6} eta{7}".format(str(percent).center(4),
                                                        '=' * (shaded - 1),
                                                        '>',
                                                        ' ' * (AVAIL_WIDTH - shaded),
                                                        current,
                                                        total,
                                                        (approximate_size(speed) + '/s').center(11),
-                                                       eta))
+                                                       eta.center(10)))
     sys.stdout.write("\r")
     sys.stdout.flush()
     if bytes_so_far >= total_size:
         sys.stdout.write('\n')
 
 
-def report_unknown(bytes_so_far, chunk_size, total_size, speed, eta):
+def report_unknown(bytes_so_far, total_size, speed, eta):
     '''
     This callback for the download function is used
     when the total size is unknown
@@ -223,7 +223,7 @@ def report_unknown(bytes_so_far, chunk_size, total_size, speed, eta):
         sys.stdout.write('\n')
 
 
-def report_onlysize(bytes_so_far, chunk_size, total_size, speed, eta):
+def report_onlysize(bytes_so_far, total_size, speed, eta):
     '''
     This callback for the download function is used when console width
     is not enough to print the bar.
@@ -324,7 +324,7 @@ def download(link, outdir='.', chunk_size=4096):
                 break
 
             fh.write(chunk)
-            reporthook(bytes_so_far, chunk_size, total_size, speed, eta)
+            reporthook(bytes_so_far, total_size, speed, eta)
     except KeyboardInterrupt:
         print('\n\nCtrl + C: Download aborted by user')
         print('Partial downloaded file:\n{0}'.format(os.path.abspath(tmpfile)))

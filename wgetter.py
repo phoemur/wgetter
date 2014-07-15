@@ -194,12 +194,14 @@ def report_bar(bytes_so_far, chunk_size, total_size, speed, eta):
     total = approximate_size(total_size).center(9)
     shaded = int(float(bytes_so_far) / total_size * AVAIL_WIDTH)
     sys.stdout.write(
-        " {0}% [{1}{2}{3}]".format(str(percent).center(4),
-                                   '=' * (shaded - 1),
-                                   '>',
-                                   ' ' * (AVAIL_WIDTH - shaded)) + "{0}/{1} {2}".format(current,
-                                                                                        total,
-                                                                                        (approximate_size(speed) + '/s').center(12)) + "eta {0}".format(eta))
+        " {0}% [{1}{2}{3}] {4}/{5} {6} eta {7}".format(str(percent).center(4),
+                                                       '=' * (shaded - 1),
+                                                       '>',
+                                                       ' ' * (AVAIL_WIDTH - shaded),
+                                                       current,
+                                                       total,
+                                                       (approximate_size(speed) + '/s').center(11),
+                                                       eta))
     sys.stdout.write("\r")
     sys.stdout.flush()
     if bytes_so_far >= total_size:

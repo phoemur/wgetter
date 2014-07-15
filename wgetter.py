@@ -9,7 +9,7 @@ API Usage:
 
 >>> import wgetter
 >>> filename = wgetter.download('https://sites.google.com/site/doctormike/pacman-1.2.tar.gz', outdir='/home/user')
-100 % [====================================================>] 19.9KiB / 19.9KiB  100.0KiB/s
+100 % [====================================================>] 19.9KiB / 19.9KiB  100.0KiB/s  eta 0:00:01
 >>> filename
 '/home/user/pacman-1.2.tar.gz'
 """
@@ -19,6 +19,7 @@ import os
 import shutil
 import tempfile
 import hashlib
+import datetime
 
 from time import time
 
@@ -37,7 +38,8 @@ SUFFIXES = {1000: ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
 
 def approximate_size(size, a_kilobyte_is_1024_bytes=True):
     '''
-    Humansize.py from Dive into Python3 - Mark Pilgrim - http://www.diveintopython3.net/
+    Humansize.py from Dive into Python3
+    Mark Pilgrim - http://www.diveintopython3.net/
     Copyright (c) 2009, Mark Pilgrim, All rights reserved.
 
     Convert a file size to human-readable form.
@@ -123,7 +125,7 @@ def get_console_width():
 CONSOLE_WIDTH = get_console_width()
 
 # Need 2 spaces more to avoid linefeed on Windows
-AVAIL_WIDTH = CONSOLE_WIDTH - 44 if os.name == 'nt' else CONSOLE_WIDTH - 42
+AVAIL_WIDTH = CONSOLE_WIDTH - 57 if os.name == 'nt' else CONSOLE_WIDTH - 55
 
 
 def filename_from_url(url):
@@ -183,7 +185,7 @@ def filename_fix_existing(filename, dirname):
     return '{0}({1}).{2}'.format(name, idx, ext)
 
 
-def report_bar(bytes_so_far, chunk_size, total_size, speed):
+def report_bar(bytes_so_far, chunk_size, total_size, speed, eta):
     '''
     This callback for the download function is used to print the download bar
     '''
@@ -191,32 +193,48 @@ def report_bar(bytes_so_far, chunk_size, total_size, speed):
     current = approximate_size(bytes_so_far).center(9)
     total = approximate_size(total_size).center(9)
     shaded = int(float(bytes_so_far) / total_size * AVAIL_WIDTH)
-    sys.stdout.write(" {0}% [{1}{2}{3}]".format(str(percent).center(4), '=' * (shaded - 1), '>',
-                                                ' ' * (AVAIL_WIDTH - shaded)) + "{0}/{1} {2}".format(current, total,
-                                                                                                     (approximate_size(speed) + '/s').center(12)))
+    sys.stdout.write(
+        " {0}% [{1}{2}{3}]".format(str(percent).center(4),
+                                   '=' * (shaded - 1),
+                                   '>',
+                                   ' ' * (AVAIL_WIDTH - shaded)) + "{0}/{1} {2}".format(current,
+                                                                                        total,
+                                                                                        (approximate_size(speed) + '/s').center(12)) + "eta {0}".format(eta))
     sys.stdout.write("\r")
     sys.stdout.flush()
     if bytes_so_far >= total_size:
         sys.stdout.write('\n')
 
 
-def report_unknown(bytes_so_far, chunk_size, total_size, speed):
+def report_unknown(bytes_so_far, chunk_size, total_size, speed, eta):
     '''
-    This callback for the download function is used when the total size is unknown
+    This callback for the download function is used
+    when the total size is unknown
     '''
-    sys.stdout.write("Downloading: {0} / Unknown - {1}/s\r".format(approximate_size(bytes_so_far),
-                                                                   approximate_size(speed)))
+    sys.stdout.write(
+        "Downloading: {0} / Unknown - {1}/s\r".format(approximate_size(bytes_so_far),
+                                                      approximate_size(speed)))
+
+    sys.stdout.write("\r")
+    sys.stdout.flush()
+    if bytes_so_far >= total_size:
+        sys.stdout.write('\n')
 
 
-def report_onlysize(bytes_so_far, chunk_size, total_size, speed):
+def report_onlysize(bytes_so_far, chunk_size, total_size, speed, eta):
     '''
-    This callback for the download function is used when console width is not enough to print the bar.
+    This callback for the download function is used when console width
+    is not enough to print the bar.
     It prints only the sizes
     '''
     percent = int(bytes_so_far * 100 / total_size)
     current = approximate_size(bytes_so_far).center(10)
     total = approximate_size(total_size).center(10)
-    sys.stdout.write('D: {0}% -{1}/{2}\r'.format(percent, current, total))
+    sys.stdout.write('D: {0}% -{1}/{2}'.format(percent, current, total) + "eta {0}".format(eta))
+    sys.stdout.write("\r")
+    sys.stdout.flush()
+    if bytes_so_far >= total_size:
+        sys.stdout.write('\n')
 
 
 def md5sum(filename, blocksize=8192):
@@ -235,10 +253,12 @@ def md5sum(filename, blocksize=8192):
 
 def download(link, outdir='.', chunk_size=4096):
     '''
-    This is the Main function, which downloads a given link and saves on outdir (default = current directory)
+    This is the Main function, which downloads a given link
+    and saves on outdir (default = current directory)
     '''
     url = None
     fh = None
+    eta = 'unknown '
     bytes_so_far = 0
     filename = filename_from_url(link) or "."
 
@@ -265,7 +285,7 @@ def download(link, outdir='.', chunk_size=4096):
 
         # Define which callback we're gonna use
         if total_size != 'unknown':
-            if CONSOLE_WIDTH >= 45:
+            if CONSOLE_WIDTH > 57:
                 reporthook = report_bar
             else:
                 reporthook = report_onlysize
@@ -289,13 +309,20 @@ def download(link, outdir='.', chunk_size=4096):
                 # Set register properly for future use
                 bytes_register = bytes_so_far
 
+                # Estimative of remaining download time
+                if total_size != 'unknown':
+                    eta_sec = int((total_size - bytes_so_far) / speed)
+                    eta = str(datetime.timedelta(seconds=eta_sec))
+                else:
+                    eta = 'unknown '
+
             bytes_so_far += len(chunk)
 
             if not chunk:
                 break
 
             fh.write(chunk)
-            reporthook(bytes_so_far, chunk_size, total_size, speed)
+            reporthook(bytes_so_far, chunk_size, total_size, speed, eta)
     except KeyboardInterrupt:
         print('\n\nCtrl + C: Download aborted by user')
         print('Partial downloaded file:\n{0}'.format(os.path.abspath(tmpfile)))

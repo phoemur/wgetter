@@ -20,7 +20,7 @@ API Usage
 
     >>> import wgetter
     >>> filename = wgetter.download('https://sites.google.com/site/doctormike/pacman-1.2.tar.gz', outdir='/home/user')
-    100 % [====================================================>] 19.9KiB / 19.9KiB  100.0KiB/s  
+    100 % [====================================================>] 19.9KiB / 19.9KiB  100.0KiB/s  eta 0:00:01
     >>> filename
     '/home/user/pacman-1.2.tar.gz'
     
@@ -37,7 +37,7 @@ Manually:
 
 Get the tarball at
     
-    https://github.com/phoemur/wgetter/tarball/0.3
+    https://github.com/phoemur/wgetter/tarball/0.4
     
 or git clone
     
@@ -49,6 +49,9 @@ Then
     
 Changelog
 ========
+
+0.4 (2014-07-13)
+ * Added improved bar and estimated transfer time
 
 0.3 (2014-03-08)
  * Added the option to set download's output directory

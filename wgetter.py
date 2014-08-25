@@ -316,7 +316,7 @@ def download(link, outdir='.', chunk_size=4096):
                 bytes_register = bytes_so_far
 
                 # Estimative of remaining download time
-                if total_size != 'unknown' and  len(speed_list) == 3:
+                if total_size != 'unknown' and len(speed_list) == 3:
                     speed_mean = sum(speed_list) / 3
                     eta_sec = int((total_size - bytes_so_far) / speed_mean)
                     eta = str(datetime.timedelta(seconds=eta_sec))

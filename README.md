@@ -37,7 +37,7 @@ Manually:
 
 Get the tarball at
     
-    https://github.com/phoemur/wgetter/tarball/0.4
+    https://github.com/phoemur/wgetter/tarball/0.5.1
     
 or git clone
     

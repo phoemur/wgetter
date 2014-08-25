@@ -2,16 +2,16 @@ from distutils.core import setup
             
 setup(
     name='wgetter',
-    version='0.5',
+    version='0.5.1',
     author='Fernando Giannasi <phoemur@gmail.com>',
     url='https://github.com/phoemur/wgetter',
-    download_url = 'https://github.com/phoemur/wgetter/tarball/0.5',
+    download_url = 'https://github.com/phoemur/wgetter/tarball/0.5.1',
 
     description="Another command line download utility written in python",
     license="MIT",
     classifiers=[
         'Environment :: Console',
-        'License :: MIT',
+        'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 3',

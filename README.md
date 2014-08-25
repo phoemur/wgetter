@@ -50,7 +50,7 @@ Then
 Changelog
 ========
 
-0.5 (2014-08-25)
+0.5.1 (2014-08-25)
  * Added improved bar and estimated transfer time
 
 0.3 (2014-03-08)

@@ -297,7 +297,9 @@ def download(link, outdir='.', chunk_size=4096):
         # Below are the registers to calculate network transfer rate
         time_register = time()
         speed = 0.0
+        speed_list = []
         bytes_register = 0.0
+        eta = 'unknown '
 
         # Loop that reads in chunks, calculates speed and does the callback to
         # print the progress
@@ -307,16 +309,18 @@ def download(link, outdir='.', chunk_size=4096):
             if time() - time_register > 1:
                 speed = (bytes_so_far - bytes_register) / \
                     (time() - time_register)
-                time_register = time()  # Set register properly for future use
+                speed_list.append(speed)
+
                 # Set register properly for future use
+                time_register = time()
                 bytes_register = bytes_so_far
 
                 # Estimative of remaining download time
-                if total_size != 'unknown':
-                    eta_sec = int((total_size - bytes_so_far) / speed)
+                if total_size != 'unknown' and  len(speed_list) == 3:
+                    speed_mean = sum(speed_list) / 3
+                    eta_sec = int((total_size - bytes_so_far) / speed_mean)
                     eta = str(datetime.timedelta(seconds=eta_sec))
-                else:
-                    eta = 'unknown '
+                    speed_list = []
 
             bytes_so_far += len(chunk)
 

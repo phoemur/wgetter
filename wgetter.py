@@ -204,8 +204,6 @@ def report_bar(bytes_so_far, total_size, speed, eta):
                                                       eta.center(10)))
     sys.stdout.write("\r")
     sys.stdout.flush()
-    if bytes_so_far >= total_size:
-        sys.stdout.write('\n')
 
 
 def report_unknown(bytes_so_far, total_size, speed, eta):
@@ -214,8 +212,8 @@ def report_unknown(bytes_so_far, total_size, speed, eta):
     when the total size is unknown
     '''
     sys.stdout.write(
-        "Downloading: {0} / Unknown - {1}/s\r".format(approximate_size(bytes_so_far),
-                                                      approximate_size(speed)))
+        "Downloading: {0} / Unknown - {1}/s      ".format(approximate_size(bytes_so_far),
+                                                          approximate_size(speed)))
 
     sys.stdout.write("\r")
     sys.stdout.flush()
@@ -233,8 +231,6 @@ def report_onlysize(bytes_so_far, total_size, speed, eta):
     sys.stdout.write('D: {0}% -{1}/{2}'.format(percent, current, total) + "eta {0}".format(eta))
     sys.stdout.write("\r")
     sys.stdout.flush()
-    if bytes_so_far >= total_size:
-        sys.stdout.write('\n')
 
 
 def md5sum(filename, blocksize=8192):
@@ -304,7 +300,7 @@ def download(link, outdir='.', chunk_size=4096):
         while True:
             chunk = url.read(chunk_size)
             # Update Download Speed every 1 second
-            if time() - time_register > 1:
+            if time() - time_register > 0.5:
                 speed = (bytes_so_far - bytes_register) / \
                     (time() - time_register)
                 speed_list.append(speed)
@@ -323,6 +319,7 @@ def download(link, outdir='.', chunk_size=4096):
             bytes_so_far += len(chunk)
 
             if not chunk:
+                sys.stdout.write('\n')
                 break
 
             fh.write(chunk)

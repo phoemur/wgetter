@@ -50,6 +50,9 @@ Then
 Changelog
 ========
 
+0.6 (2015-03-07)
+ * Some Bug Fixes
+
 0.5.1 (2014-08-25)
  * Added improved bar and estimated transfer time
 

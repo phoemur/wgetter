@@ -2,10 +2,10 @@ from distutils.core import setup
             
 setup(
     name='wgetter',
-    version='0.5.1',
+    version='0.6',
     author='Fernando Giannasi <phoemur@gmail.com>',
     url='https://github.com/phoemur/wgetter',
-    download_url = 'https://github.com/phoemur/wgetter/tarball/0.5.1',
+    download_url = 'https://github.com/phoemur/wgetter/tarball/0.6',
 
     description="Another command line download utility written in python",
     license="MIT",

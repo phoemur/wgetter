@@ -219,8 +219,6 @@ def report_unknown(bytes_so_far, total_size, speed, eta):
 
     sys.stdout.write("\r")
     sys.stdout.flush()
-    if bytes_so_far >= total_size:
-        sys.stdout.write('\n')
 
 
 def report_onlysize(bytes_so_far, total_size, speed, eta):

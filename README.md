@@ -1,22 +1,22 @@
 About
-========
+=====
 
 Wgetter is another command line download utility written completely in python.
 It is based on python-wget (https://bitbucket.org/techtonik/python-wget/src)
 with some improvements.
 
 It works on python >= 2.6 or python >=3.0
-Runs on Windows or Linux
+Runs on Windows or Linux or Mac
 
 
 Usage
-========
+=====
 
     python -m wgetter <URL>
 
 
 API Usage
-========
+=========
 
     >>> import wgetter
     >>> filename = wgetter.download('https://sites.google.com/site/doctormike/pacman-1.2.tar.gz', outdir='/home/user')
@@ -27,7 +27,7 @@ API Usage
 Obs.: If not set, output directory (outdir) defaults to current directory
 
 Installation
-========
+============
 
 Using PIP:
     
@@ -37,7 +37,7 @@ Manually:
 
 Get the tarball at
     
-    https://github.com/phoemur/wgetter/tarball/0.5.1
+    https://github.com/phoemur/wgetter/tarball/0.6
     
 or git clone
     
@@ -48,7 +48,7 @@ Then
     python setup.py install
     
 Changelog
-========
+=========
 
 0.6 (2015-03-07)
  * Some Bug Fixes

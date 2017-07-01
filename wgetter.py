@@ -28,9 +28,11 @@ PY3K = sys.version_info >= (3, 0)
 if PY3K:
     import urllib.request as ulib
     import urllib.parse as urlparse
+    import http.cookiejar as cjar
 else:
     import urllib2 as ulib
     import urlparse
+    import cookielib as cjar
 
 SUFFIXES = {1000: ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
             1024: ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']}
@@ -257,6 +259,7 @@ def download(link, outdir='.', chunk_size=4096):
     eta = 'unknown '
     bytes_so_far = 0
     filename = filename_from_url(link) or "."
+    cj = cjar.CookieJar()
 
     # get filename for temp file in current directory
     (fd_tmp, tmpfile) = tempfile.mkstemp(
@@ -265,7 +268,8 @@ def download(link, outdir='.', chunk_size=4096):
     os.unlink(tmpfile)
 
     try:
-        url = ulib.urlopen(link)
+        opener = ulib.build_opener(ulib.HTTPCookieProcessor(cj))
+        url = opener.open(link)
         fh = open(tmpfile, mode='wb')
 
         headers = url.info()

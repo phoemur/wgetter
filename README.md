@@ -50,6 +50,9 @@ Then
 Changelog
 =========
 
+0.7 (2017-07-01)
+ * Some Bug Fixes
+
 0.6 (2015-03-07)
  * Some Bug Fixes
 
